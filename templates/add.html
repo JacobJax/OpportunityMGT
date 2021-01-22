@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="sect top-sect">
+        <div class="add-form container">
+            <h3 style="color:#fff; text-align: center;">Add Opportunity</h3>
+            <div class="opp-form">
+                <form class="row g-3">
+                    {{ form.hidden_tag() }}
+                    <div class="col-md-6">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.company.label(class="form-label") }}
+                        {{ form.company(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.company.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.description.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.amount.label(class="form-label") }}
+                        {{ form.amount(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.level.label(class="form-label") }}
+                        {{ form.level(class="form-select") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.level.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit opportunity</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <section class="sect btom-sect">
+    </section>
+{% endblock %}

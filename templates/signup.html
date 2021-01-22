@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="sect top-sect">
+        <div class="add-form container">
+            <h3 style="color:#fff; text-align: center;">Add Opportunity</h3>
+            <div class="opp-form">
+                <form class="row g-3">
+                    {{ form.hidden_tag() }}
+                    <div class="col-md-6">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit opportunity</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <section class="sect btom-sect">
+    </section>
+{% endblock %}
