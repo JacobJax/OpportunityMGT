@@ -1,14 +1,12 @@
-{% extends "base.html" %}
+{% extends "n_base.html" %}
 
 {% block content %}
-    <section class="opp-sec">
-
+     <section class="opp-sec">
         <div class="add-head">
             <h2>OPPORTUNITIES</h2>
             <a href="{{ url_for('add') }}" class="btn btn-small">Create opportunity +</a>
         </div>
         <br><hr>
-
         <div class="opportunities">
             {% for opportunity in opportunities %}
                 <ul>
@@ -36,6 +34,5 @@
                 </ul>
             {% endfor %}
         </div>
-
     </section>
 {% endblock %}
