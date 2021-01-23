@@ -14,6 +14,10 @@ body{
     flex-direction: column;
 }
 
+li{
+    list-style: none;
+}
+
 /* navigation */
 nav{
     background: #3949ab;
@@ -76,7 +80,7 @@ nav{
 }
 
 /* buttons */
-a{text-decoration: none; color: #fff}
+a{text-decoration: none; color: #000}
 
 .btn{
     background: #40c4ff;
@@ -92,7 +96,7 @@ a{text-decoration: none; color: #fff}
 }
 .btn-i{
     border: #40c4ff 2px solid;
-    padding: 3px 15px;
+    padding: 5px 15px;
     border-radius: 3px;
 }
 .btn-i:hover{

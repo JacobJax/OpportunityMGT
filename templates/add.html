@@ -5,7 +5,7 @@
         <div class="add-form container">
             <h3 style="color:#fff; text-align: center;">Add Opportunity</h3>
             <div class="opp-form">
-                <form class="row g-3">
+                <form method="POST" class="row g-3">
                     {{ form.hidden_tag() }}
                     <div class="col-md-6">
                         {{ form.title.label(class="form-label") }}
@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Submit opportunity</button>
+                        {{ form.submit(class="btn btn-primary") }}
                     </div>
                 </form>
             </div>

@@ -3,9 +3,9 @@
 {% block content %}
     <section class="sect top-sect">
         <div class="add-form container">
-            <h3 style="color:#fff; text-align: center;">Add Opportunity</h3>
+            <h3 style="color:#fff; text-align: center;">Log in</h3>
             <div class="opp-form">
-                <form class="row g-3">
+                <form method="POST" class="row g-3">
                     {{ form.hidden_tag() }}
                     <div class="col-md-12">
                         {{ form.email.label(class="form-label") }}
@@ -26,7 +26,10 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Submit opportunity</button>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                    <div class="col-12 inactive">
+                        <p>Dont have an account? <a href="{{ url_for('signup') }}" style="color: #3949ab">Sign up</a></p>
                     </div>
                 </form>
             </div>

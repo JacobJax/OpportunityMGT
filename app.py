@@ -1,9 +1,10 @@
+from datetime import datetime
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, PasswordField, TextAreaField, IntegerField
+from wtforms import StringField, SelectField, PasswordField, TextAreaField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Email
 
 
@@ -35,18 +36,21 @@ class AddForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     amount = IntegerField('Amount:', validators=[DataRequired()])
     level = SelectField(u'Choose level', choices=[('Manager'), ('Senior'), ('Junior'), ('Entry'), ('Intern')])
+    submit = SubmitField('Submit opportunity')
 
 
 class LoginForm(FlaskForm):
 
     email = StringField('Email:', validators=[Email()])
     password = PasswordField('Password:', validators=[DataRequired()])
+    submit = SubmitField('Log in')
 
 
 class SignUpForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired()])
     email = StringField('Email:', validators=[Email()])
     password = PasswordField('Password:', validators=[DataRequired()])
+    submit = SubmitField('Sign up')
 
 ######################################
 
@@ -70,6 +74,7 @@ class User(UserMixin, db.Model):
     def json(self):
         opportunities = [opportunity.json() for opportunity in self.opportunities]
         return {
+            'id': self.id,
             'username': self.username,
             'email': self.email,
             'opportunities': opportunities
@@ -85,6 +90,7 @@ class Opportunity(db.Model):
     description = db.Column(db.String(255), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     level = db.Column(db.String(50), nullable=False)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     discoveries = db.relationship('Discovery', backref='opportunity', lazy=True)
 
@@ -100,11 +106,14 @@ class Opportunity(db.Model):
     def json(self):
         discoveries = [discovery.json() for discovery in self.discoveries]
         return {
+            'id': self.id,
             'title': self.title,
             'description': self.description,
             'amount': self.amount,
             'level': self.level,
-            'discoveries': len(discoveries)
+            'discoveries': len(discoveries),
+            'author': self.author.username,
+            'date_posted': self.date_posted
         }
 
 
@@ -128,7 +137,8 @@ class Discovery(db.Model):
 def index():
 
     opportunities_list = Opportunity.query.all()
-    opportunities = [opportunity.json() for opportunity in opportunities_list]
+    n_opportunities = [opportunity.json() for opportunity in opportunities_list]
+    opportunities = n_opportunities[::-1]
 
     return render_template('index.html', opportunities=opportunities)
 
@@ -179,18 +189,27 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(form.email.data).first()
-        if check_password_hash(user.password, form.password.data):
-            
-            login_user(user)
-            next = request.args.get('next')
-            if next == None or next[0] == '/':
-                next = url_for('index')
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is not None and check_password_hash(user.password, form.password.data):
 
-            return redirect('next')
+            login_user(user)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('index'))
 
     return render_template('login.html', form=form)
 
+@app.route('/opportunity/<int:opportunity_id>')
+@login_required
+def opportunity(opportunity_id):
+
+    discovery = Discovery(current_user.id, opportunity_id)
+    db.session.add(discovery)
+    db.session.commit()
+
+    opportunity_q = Opportunity.query.filter_by(id=opportunity_id).first()
+    opportunity = opportunity_q.json()
+
+    return render_template('opportunity.html', opportunity=opportunity)
 
 @app.route('/logout')
 @login_required

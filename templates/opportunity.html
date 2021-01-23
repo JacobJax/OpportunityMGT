@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="sect top-sect opp-sect" style="text-align: center; color: white; padding-top: 20px;">
+        <div class="opportunity-sect">
+            <h3>{{ opportunity['title'] }}</h3>
+            <p>Posted by: {{ opportunity['author'] }} | {{ opportunity['date_posted'] }}</p>
+            <p>Level: {{ opportunity['level'] }} | Discoveries: {{ opportunity['discoveries'] }}</p>
+        </div>
+    </section>
+    <section class="sect btom-sect" style="text-align: center; display: grid; place-items: center;">
+        <p style="width: 90%; max-width: 768px;">{{ opportunity['description'] }}</p>
+    </section>
+{% endblock %}
